@@ -1,9 +1,9 @@
-FROM nginx:1.11.10-alpine
+FROM nginx:1.24.0-alpine
 MAINTAINER Jason Wilder mail@jasonwilder.com
 
 # Install wget and install/updates certificates
 RUN apk add --no-cache --virtual .run-deps \
-    ca-certificates bash wget \
+    ca-certificates bash wget curl python3 py3-pip \
     && update-ca-certificates
 
 # Configure Nginx and apply fix for very long server names
@@ -24,6 +24,8 @@ COPY . /app/
 WORKDIR /app/
 
 ENV DOCKER_HOST unix:///tmp/docker.sock
+
+RUN pip3 install awscli
 
 VOLUME ["/etc/nginx/certs"]
 
